@@ -18,7 +18,9 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddSingleton<ProductsRepository>(); // register the service here
+// register the service here
+builder.Services.AddSingleton<UserRepository>();
+builder.Services.AddSingleton<ProductsRepository>();
 
 var app = builder.Build();
 

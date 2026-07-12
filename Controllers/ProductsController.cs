@@ -26,26 +26,19 @@ namespace ProductsAPI.Controllers
         public ActionResult<IEnumerable<ProductsRepository>> GetProducts()
         {
             var products = this.prodInstance.GetProducts();
-            Console.WriteLine("Products from controller class");
-            foreach (var product in products)
-            {
-                Console.WriteLine(product);
-            }
-
             return Ok(products);
         }
 
         [HttpPost]
         public void AddProduct(Products product)
         {
-
             try
             {
-                Console.WriteLine(product);
                 this.prodInstance.InsertProduct(product);
             }
-            catch (Exception error) {
-                Console.WriteLine("error while adding product: ",error);
+            catch (Exception error)
+            {
+                Console.WriteLine("error while adding product: ", error.Message);
             }
         }
 
