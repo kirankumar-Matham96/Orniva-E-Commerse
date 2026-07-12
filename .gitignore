@@ -1,0 +1,29 @@
+# Visual Studio
+.vs/
+
+# Build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# NuGet packages
+packages/
+
+# Logs
+*.log
+
+# ASP.NET Core
+appsettings.Development.json
+
+# Rider
+.idea/
+
+# VS Code
+.vscode/
+
+# deployment files
+
+*.publishSettings

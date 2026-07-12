@@ -1,0 +1,6 @@
+@OrnivaApi_HostAddress = http://localhost:5001
+
+GET {{OrnivaApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
