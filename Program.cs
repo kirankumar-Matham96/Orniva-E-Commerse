@@ -1,5 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using OrnivaApi.Data;
+using OrnivaApi.Mapping;
+using OrnivaApi.Repositories;
+using OrnivaApi.Repositories.Interfaces;
+using OrnivaApi.Services;
+using OrnivaApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +12,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+// Registering
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
+
 builder.Services.AddOpenApi();
 
 var connectionString = builder.Configuration.GetConnectionString("DB_CONNECTION_STRING");
@@ -28,10 +40,10 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
+//if (app.Environment.IsDevelopment())
+//{
+//}
+app.MapOpenApi();
 
 app.UseHttpsRedirection();
 
