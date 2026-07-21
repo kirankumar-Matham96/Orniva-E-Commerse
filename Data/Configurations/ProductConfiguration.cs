@@ -23,8 +23,20 @@ namespace OrnivaApi.Data.Configurations
             builder.Property(p => p.Description)
                    .IsRequired();
 
+            // Short Description
+            builder.Property(p => p.ShortDescription)
+                   .HasMaxLength(500);
+
+            // Image Url
+            builder.Property(p => p.ImageUrl)
+                   .HasMaxLength(500);
+
             // Price
             builder.Property(p => p.Price)
+                   .HasPrecision(18, 2);
+
+            // Descount Price
+            builder.Property(p => p.DiscountPrice)
                    .HasPrecision(18, 2);
 
             // Brand
@@ -37,6 +49,26 @@ namespace OrnivaApi.Data.Configurations
 
             builder.HasIndex(p => p.SKU)
                    .IsUnique();
+
+            // Slug
+            builder.Property(p => p.Slug)
+                   .IsRequired()
+                   .HasMaxLength(250);
+
+            builder.HasIndex(p => p.Slug)
+                   .IsUnique();
+
+            // Stock
+            builder.ToTable(t =>
+            {
+                t.HasCheckConstraint(
+                    "CK_Product_StockQuantity",
+                    "[StockQuantity] >= 0");
+            });
+
+            // category id
+            builder.Property(p => p.CategoryId)
+                   .IsRequired();
 
             // Relationship
             builder.HasOne(p => p.Category)

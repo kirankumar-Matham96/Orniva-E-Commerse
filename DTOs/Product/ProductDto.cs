@@ -1,48 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace OrnivaApi.Entities
+﻿namespace OrnivaApi.DTOs.Product
 {
-    public class Product : BaseEntity
+    public class ProductDto
     {
         public int Id { get; set; }
 
-        [Required]
-        [MaxLength(200)]
         public string Name { get; set; } = string.Empty;
 
-        [Required]
-        [MaxLength(250)]
         public string Slug { get; set; } = string.Empty;
 
-        [Required]
         public string Description { get; set; } = string.Empty;
 
-        [MaxLength(500)]
         public string? ShortDescription { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
 
-        [Column(TypeName = "decimal(18,2)")]
         public decimal? DiscountPrice { get; set; }
 
         public int StockQuantity { get; set; }
 
-        [MaxLength(100)]
         public string? Brand { get; set; }
 
-        [Required]
-        [MaxLength(50)]
         public string SKU { get; set; } = string.Empty;
 
-        [MaxLength(500)]
         public string? ImageUrl { get; set; }
 
-        // Foreign Key
         public int CategoryId { get; set; }
 
-        // Navigation Property
-        public Category Category { get; set; } = null!;
+        // Helpful for the frontend
+        public string CategoryName { get; set; } = string.Empty;
     }
 }
