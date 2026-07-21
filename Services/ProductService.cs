@@ -1,5 +1,6 @@
 ﻿using OrnivaApi.DTOs.Product;
 using OrnivaApi.Entities;
+using OrnivaApi.Exceptions;
 using OrnivaApi.Repositories.Interfaces;
 using OrnivaApi.Services.Interfaces;
 
@@ -94,7 +95,10 @@ namespace OrnivaApi.Services
         {
             var product = await _productRepository.GetById(id);
 
-            return product != null ? MapToDto(product) : null;
+            if (product == null)
+                throw new NotFoundException($"Product with the id {id} is not found");
+
+            return MapToDto(product);
         }
 
         public async Task<bool> Update(int id, UpdateProductDto dto)
@@ -103,13 +107,13 @@ namespace OrnivaApi.Services
             var product = await _productRepository.GetById(id);
 
             if (product == null)
-                return false;
+                throw new NotFoundException($"Product with the id {id} is not found");
 
             // Check category exists
             var category = await _categoryRepository.GetById(dto.CategoryId);
 
             if (category == null)
-                throw new Exception("Category not found");
+                throw new NotFoundException($"Category with the id {dto.CategoryId} is not found");
 
             // Check duplicate Sku
             var existingSku = await _productRepository.GetBySKUExceptId(product.SKU, id);
@@ -147,7 +151,7 @@ namespace OrnivaApi.Services
             var product = await _productRepository.GetById(id);
 
             if (product == null)
-                return false;
+                throw new NotFoundException($"Product with the id {id} is not found");
 
             product.IsActive = false;
 

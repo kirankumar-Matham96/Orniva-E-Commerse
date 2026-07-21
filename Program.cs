@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OrnivaApi.Data;
+using OrnivaApi.Exceptions;
 using OrnivaApi.Repositories;
 using OrnivaApi.Repositories.Interfaces;
 using OrnivaApi.Services;
@@ -59,6 +60,8 @@ app.UseHttpsRedirection();
 app.UseCors("AllowAll");
 
 app.UseAuthorization();
+
+app.UseMiddleware<GlobalExceptionHandler>();
 
 app.MapControllers();
 

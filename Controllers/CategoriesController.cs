@@ -28,9 +28,6 @@ namespace OrnivaApi.Controllers
         {
             var category = await _categoryService.GetById(id);
 
-            if (category == null)
-                return NotFound();
-
             return Ok(category);
         }
 
@@ -50,9 +47,6 @@ namespace OrnivaApi.Controllers
         {
             var updated = await _categoryService.Update(id, dto);
 
-            if (!updated)
-                return NotFound();
-
             return NoContent();
         }
 
@@ -60,9 +54,6 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _categoryService.Delete(id);
-
-            if (!deleted)
-                return NotFound();
 
             return NoContent();
         }

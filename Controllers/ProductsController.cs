@@ -27,7 +27,7 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _service.GetById(id);
-            return product != null ? Ok(product) : NotFound();
+            return Ok(product);
         }
 
         [HttpPost]
@@ -47,7 +47,7 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Update(id, dto);
 
-            return !result ? NotFound() : Content("Updated successfully");
+            return Content("Updated successfully");
         }
 
         [HttpDelete("{id:int}")]
@@ -55,7 +55,7 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Delete(id);
 
-            return !result ? NotFound() : Content("Deleted successfully");
+            return Content("Deleted successfully");
         }
     }
 }

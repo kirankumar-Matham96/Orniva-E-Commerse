@@ -1,5 +1,6 @@
 ﻿using OrnivaApi.DTOs.Category;
 using OrnivaApi.Entities;
+using OrnivaApi.Exceptions;
 using OrnivaApi.Repositories.Interfaces;
 using OrnivaApi.Services.Interfaces;
 
@@ -58,7 +59,7 @@ namespace OrnivaApi.Services
             var category = await _categoryRepository.GetById(id);
 
             if (category == null)
-                return null;
+                throw new NotFoundException($"Category with the id {id} is not found");
 
             return MapToDto(category);
         }
@@ -68,7 +69,7 @@ namespace OrnivaApi.Services
             var category = await _categoryRepository.GetById(id);
 
             if (category == null)
-                return false;
+                throw new NotFoundException($"Category with the id {id} is not found");
 
             category.Name = dto.Name;
             category.Description = dto.Description;
@@ -84,7 +85,7 @@ namespace OrnivaApi.Services
             var category = await _categoryRepository.GetById(id);
 
             if (category == null)
-                return false;
+                throw new NotFoundException($"Category with the id {id} is not found");
 
             category.IsActive = false;
             category.UpdatedAt = DateTime.UtcNow;
