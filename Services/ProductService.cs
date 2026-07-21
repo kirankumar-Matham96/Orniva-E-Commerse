@@ -7,8 +7,8 @@ namespace OrnivaApi.Services
 {
     public class ProductService : IProductService
     {
-        IProductRepository _productRepository;
-        ICategoryRepository _categoryRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
         public ProductService(ICategoryRepository categoryRepository, IProductRepository productRepository)
         {

@@ -58,12 +58,12 @@ namespace OrnivaApi.Repositories
 
         public async Task<Product?> GetBySKUExceptId(string sku, int id)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.SKU == sku && p.Id == id);
+            return await _context.Products.FirstOrDefaultAsync(p => p.SKU == sku && p.Id != id);
         }
 
         public Task<Product?> GetBySlugExceptId(string slug, int id)
         {
-            return _context.Products.FirstOrDefaultAsync(p => p.Slug == slug && p.Id == id);
+            return _context.Products.FirstOrDefaultAsync(p => p.Slug == slug && p.Id != id);
         }
     }
 }
