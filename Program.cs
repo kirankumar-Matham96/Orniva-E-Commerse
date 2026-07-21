@@ -16,13 +16,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registering
 //builder.Services.AddAutoMapper(typeof(MappingProfile));
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<ICategoryService, CategoryService>();
-
-
 //builder.Services.AddOpenApi();
+
+// Repositor DI
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+// Service DI
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IProductService, ProductService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DB_CONNECTION_STRING");
 builder.Services.AddDbContext<OrnivaDbContext>(options =>
