@@ -19,7 +19,6 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var products = await _service.GetAll();
-            //return Ok(products);
 
             return Ok(
                     new ApiResponse<IEnumerable<ProductDto>>(
@@ -34,7 +33,6 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _service.GetById(id);
-            //return Ok(product);
 
             return Ok(
                     new ApiResponse<ProductDto>(
@@ -66,7 +64,6 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Update(id, dto);
 
-            //return Content("Updated successfully");
             return Ok(
                     new ApiResponse<Object>(
                             true,
@@ -81,7 +78,6 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Delete(id);
 
-            //return Content("Deleted successfully");
             return Ok(
                     new ApiResponse<Object>(
                             true,

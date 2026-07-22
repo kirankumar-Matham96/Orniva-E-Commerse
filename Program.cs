@@ -1,6 +1,8 @@
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using OrnivaApi.Data;
 using OrnivaApi.Exceptions;
+using OrnivaApi.Filters;
 using OrnivaApi.Repositories;
 using OrnivaApi.Repositories.Interfaces;
 using OrnivaApi.Services;
@@ -8,10 +10,8 @@ using OrnivaApi.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
 
 // swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -19,6 +19,16 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddAutoMapper(typeof(MappingProfile));
 //builder.Services.AddOpenApi();
+
+// FluentValidation
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddScoped<ValidationFilter>();
+
+// controller with filter service options
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ValidationFilter>();
+});
 
 // Repositor DI
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();

@@ -21,8 +21,6 @@ namespace OrnivaApi.Controllers
         {
             var categories = await _categoryService.GetAll();
 
-            //return Ok(categories);
-
             return Ok(
                     new ApiResponse<IEnumerable<CategoryDto>>(
                         true,
@@ -37,8 +35,6 @@ namespace OrnivaApi.Controllers
         {
             var category = await _categoryService.GetById(id);
 
-            //return Ok(category);
-
             return Ok(
                     new ApiResponse<CategoryDto>(
                         true,
@@ -52,11 +48,6 @@ namespace OrnivaApi.Controllers
         public async Task<ActionResult<CategoryDto>> Create(CreateCategoryDto dto)
         {
             var category = await _categoryService.Create(dto);
-
-            //return CreatedAtAction(
-            //    nameof(GetById),
-            //    new { id = category.Id },
-            //    category);
 
             return CreatedAtAction(
                             nameof(GetById),
@@ -73,8 +64,6 @@ namespace OrnivaApi.Controllers
         {
             var updated = await _categoryService.Update(id, dto);
 
-            //return NoContent();
-
             return Ok(
                     new ApiResponse<Object>(
                             true,
@@ -88,8 +77,6 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> Delete(int id)
         {
             var deleted = await _categoryService.Delete(id);
-
-            //return NoContent();
 
             return Ok(
                     new ApiResponse<Object>(
