@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrnivaApi.DTOs.Category;
+using OrnivaApi.Responses;
 using OrnivaApi.Services.Interfaces;
 
 namespace OrnivaApi.Controllers
@@ -20,7 +21,15 @@ namespace OrnivaApi.Controllers
         {
             var categories = await _categoryService.GetAll();
 
-            return Ok(categories);
+            //return Ok(categories);
+
+            return Ok(
+                    new ApiResponse<IEnumerable<CategoryDto>>(
+                        true,
+                        "Categories retreived successfully",
+                        categories
+                    )
+                );
         }
 
         [HttpGet("{id:int}")]
@@ -28,7 +37,15 @@ namespace OrnivaApi.Controllers
         {
             var category = await _categoryService.GetById(id);
 
-            return Ok(category);
+            //return Ok(category);
+
+            return Ok(
+                    new ApiResponse<CategoryDto>(
+                        true,
+                        $"Category with id {id} is retreived successfully",
+                        category
+                    )
+                );
         }
 
         [HttpPost]
@@ -36,10 +53,19 @@ namespace OrnivaApi.Controllers
         {
             var category = await _categoryService.Create(dto);
 
+            //return CreatedAtAction(
+            //    nameof(GetById),
+            //    new { id = category.Id },
+            //    category);
+
             return CreatedAtAction(
-                nameof(GetById),
-                new { id = category.Id },
-                category);
+                            nameof(GetById),
+                            new { id = category.Id },
+                            new ApiResponse<CategoryDto>(
+                                    true,
+                                    "Category created successfully",
+                                    category
+                                ));
         }
 
         [HttpPut("{id:int}")]
@@ -47,7 +73,15 @@ namespace OrnivaApi.Controllers
         {
             var updated = await _categoryService.Update(id, dto);
 
-            return NoContent();
+            //return NoContent();
+
+            return Ok(
+                    new ApiResponse<Object>(
+                            true,
+                            $"Category with id {id} is updated successfully",
+                            null
+                        )
+                );
         }
 
         [HttpDelete("{id:int}")]
@@ -55,7 +89,15 @@ namespace OrnivaApi.Controllers
         {
             var deleted = await _categoryService.Delete(id);
 
-            return NoContent();
+            //return NoContent();
+
+            return Ok(
+                    new ApiResponse<Object>(
+                            true,
+                            $"Category with id {id} is deleted successfully",
+                            null
+                        )
+                );
         }
     }
 }

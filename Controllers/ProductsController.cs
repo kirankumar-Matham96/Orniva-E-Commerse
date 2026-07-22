@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using OrnivaApi.DTOs.Product;
-using OrnivaApi.Services;
+using OrnivaApi.Responses;
 using OrnivaApi.Services.Interfaces;
 
 namespace OrnivaApi.Controllers
@@ -20,14 +19,30 @@ namespace OrnivaApi.Controllers
         public async Task<IActionResult> GetAll()
         {
             var products = await _service.GetAll();
-            return Ok(products);
+            //return Ok(products);
+
+            return Ok(
+                    new ApiResponse<IEnumerable<ProductDto>>(
+                            true,
+                            "Products retreived successfully",
+                            products
+                        )
+                );
         }
 
         [HttpGet("{id:int}")]
         public async Task<IActionResult> GetById(int id)
         {
             var product = await _service.GetById(id);
-            return Ok(product);
+            //return Ok(product);
+
+            return Ok(
+                    new ApiResponse<ProductDto>(
+                            true,
+                            $"Product with id {id} is retreived successfully",
+                            product
+                        )
+                );
         }
 
         [HttpPost]
@@ -38,7 +53,11 @@ namespace OrnivaApi.Controllers
             return CreatedAtAction(
                 nameof(GetById),
                 new { id = product.Id },
-                product
+                new ApiResponse<ProductDto>(
+                        true,
+                        "Product added successfully",
+                        product
+                    )
             );
         }
 
@@ -47,7 +66,14 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Update(id, dto);
 
-            return Content("Updated successfully");
+            //return Content("Updated successfully");
+            return Ok(
+                    new ApiResponse<Object>(
+                            true,
+                            $"Product with id {id} is updated successfuly",
+                            null
+                        )
+                );
         }
 
         [HttpDelete("{id:int}")]
@@ -55,7 +81,14 @@ namespace OrnivaApi.Controllers
         {
             var result = await _service.Delete(id);
 
-            return Content("Deleted successfully");
+            //return Content("Deleted successfully");
+            return Ok(
+                    new ApiResponse<Object>(
+                            true,
+                            $"Product with id {id} is deleted successfuly",
+                            null
+                        )
+                );
         }
     }
 }
