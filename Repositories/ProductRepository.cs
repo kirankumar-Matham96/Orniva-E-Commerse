@@ -16,13 +16,6 @@ namespace OrnivaApi.Repositories
             _context = context;
         }
 
-        //public async Task<IEnumerable<Product>> GetAll()
-        //{
-        //    return await _context.Products
-        //        .Include(p => p.Category)
-        //        .Where(p => p.IsActive)
-        //        .ToListAsync();
-        //}
         public async Task<PagedResult<Product>> GetAll(ProductQueryParameters queryParameters)
         {
             IQueryable<Product> query = _context.Products
@@ -38,6 +31,41 @@ namespace OrnivaApi.Repositories
                     p.Name.Contains(search) ||
                     (p.Brand ?? string.Empty).ToLower().Contains(search) ||
                     p.SKU.Contains(search));
+            }
+
+            // Category
+            if (queryParameters.CategoryId.HasValue)
+            {
+                query = query.Where(p =>
+                    p.CategoryId == queryParameters.CategoryId.Value);
+            }
+
+            // Brand
+            if (!string.IsNullOrWhiteSpace(queryParameters.Brand))
+            {
+                query = query.Where(p =>
+                    p.Brand != null &&
+                    p.Brand.Contains(queryParameters.Brand));
+            }
+
+            // Price Range
+            if (queryParameters.MinPrice.HasValue)
+            {
+                query = query.Where(p =>
+                    p.Price >= queryParameters.MinPrice.Value);
+            }
+
+            if (queryParameters.MaxPrice.HasValue)
+            {
+                query = query.Where(p =>
+                    p.Price <= queryParameters.MaxPrice.Value);
+            }
+
+            // Stock
+            if (queryParameters.InStock == true)
+            {
+                query = query.Where(p =>
+                    p.StockQuantity > 0);
             }
 
             // Sorting

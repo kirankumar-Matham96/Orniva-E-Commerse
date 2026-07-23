@@ -19,5 +19,15 @@
         public string? SortBy { get; set; }
 
         public string SortOrder { get; set; } = "asc";
+
+        public int? CategoryId { get; set; }
+
+        public string? Brand { get; set; }
+
+        public decimal? MinPrice { get; set; }
+
+        public decimal? MaxPrice { get; set; }
+
+        public bool? InStock { get; set; }
     }
 }
