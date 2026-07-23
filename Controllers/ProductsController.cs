@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using OrnivaApi.DTOs.Common;
 using OrnivaApi.DTOs.Product;
 using OrnivaApi.Responses;
 using OrnivaApi.Services.Interfaces;
@@ -15,18 +16,26 @@ namespace OrnivaApi.Controllers
             _service = service;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var products = await _service.GetAll();
+        //[HttpGet]
+        //public async Task<IActionResult> GetAll()
+        //{
+        //    var products = await _service.GetAll();
 
-            return Ok(
-                    new ApiResponse<IEnumerable<ProductDto>>(
-                            true,
-                            "Products retreived successfully",
-                            products
-                        )
-                );
+        //    return Ok(
+        //            new ApiResponse<IEnumerable<ProductDto>>(
+        //                    true,
+        //                    "Products retreived successfully",
+        //                    products
+        //                )
+        //        );
+        //}
+
+        [HttpGet]
+        public async Task<ActionResult<PagedResponse<IEnumerable<ProductDto>>>> GetAll([FromQuery] ProductQueryParameters queryParameters)
+        {
+            var response = await _service.GetAll(queryParameters);
+
+            return Ok(response);
         }
 
         [HttpGet("{id:int}")]

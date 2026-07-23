@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using OrnivaApi.Common;
 using OrnivaApi.Data;
+using OrnivaApi.DTOs.Common;
 using OrnivaApi.Entities;
 using OrnivaApi.Repositories.Interfaces;
 
@@ -14,12 +16,62 @@ namespace OrnivaApi.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Product>> GetAll()
+        //public async Task<IEnumerable<Product>> GetAll()
+        //{
+        //    return await _context.Products
+        //        .Include(p => p.Category)
+        //        .Where(p => p.IsActive)
+        //        .ToListAsync();
+        //}
+        public async Task<PagedResult<Product>> GetAll(ProductQueryParameters queryParameters)
         {
-            return await _context.Products
+            IQueryable<Product> query = _context.Products
                 .Include(p => p.Category)
-                .Where(p => p.IsActive)
+                .Where(p => p.IsActive);
+
+            // Searching
+            if (!string.IsNullOrWhiteSpace(queryParameters.Search))
+            {
+                string search = queryParameters.Search.Trim().ToLower();
+
+                query = query.Where(p =>
+                    p.Name.Contains(search) ||
+                    (p.Brand ?? string.Empty).ToLower().Contains(search) ||
+                    p.SKU.Contains(search));
+            }
+
+            // Sorting
+            query = (queryParameters.SortBy?.ToLower(), queryParameters.SortOrder.ToLower()) switch
+            {
+                ("name", "desc") => query.OrderByDescending(p => p.Name),
+                ("name", _) => query.OrderBy(p => p.Name),
+
+                ("price", "desc") => query.OrderByDescending(p => p.Price),
+                ("price", _) => query.OrderBy(p => p.Price),
+
+                ("stock", "desc") => query.OrderByDescending(p => p.StockQuantity),
+                ("stock", _) => query.OrderBy(p => p.StockQuantity),
+
+                ("brand", "desc") => query.OrderByDescending(p => p.Brand),
+                ("brand", _) => query.OrderBy(p => p.Brand),
+
+                _ => query.OrderBy(p => p.Id)
+            };
+
+            int totalRecords = await query.CountAsync();
+
+            var products = await query
+                .Skip((queryParameters.PageNumber - 1) * queryParameters.PageSize)
+                .Take(queryParameters.PageSize)
                 .ToListAsync();
+
+            return new PagedResult<Product>
+            {
+                Items = products,
+                TotalRecords = totalRecords,
+                PageNumber = queryParameters.PageNumber,
+                PageSize = queryParameters.PageSize
+            };
         }
 
         public async Task<Product?> GetById(int id)

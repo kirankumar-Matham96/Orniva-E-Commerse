@@ -1,7 +1,9 @@
-﻿using OrnivaApi.DTOs.Product;
+﻿using OrnivaApi.DTOs.Common;
+using OrnivaApi.DTOs.Product;
 using OrnivaApi.Entities;
 using OrnivaApi.Exceptions;
 using OrnivaApi.Repositories.Interfaces;
+using OrnivaApi.Responses;
 using OrnivaApi.Services.Interfaces;
 
 namespace OrnivaApi.Services
@@ -84,11 +86,33 @@ namespace OrnivaApi.Services
             return MapToDto(product);
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAll()
-        {
-            var products = await _productRepository.GetAll();
+        //public async Task<IEnumerable<ProductDto>> GetAll()
+        //{
+        //    var products = await _productRepository.GetAll();
 
-            return products.Select(MapToDto);
+        //    return products.Select(MapToDto);
+        //}
+
+        public async Task<PagedResponse<IEnumerable<ProductDto>>> GetAll(ProductQueryParameters queryParameters)
+        {
+            var pagedResult = await _productRepository.GetAll(queryParameters);
+
+            var products = pagedResult.Items
+                .Select(MapToDto)
+                .ToList();
+
+            var pagination = new PaginationMetadata
+            {
+                PageNumber = pagedResult.PageNumber,
+                PageSize = pagedResult.PageSize,
+                TotalRecords = pagedResult.TotalRecords
+            };
+
+            return new PagedResponse<IEnumerable<ProductDto>>(
+                true,
+                "Products retrieved successfully.",
+                products,
+                pagination);
         }
 
         public async Task<ProductDto?> GetById(int id)

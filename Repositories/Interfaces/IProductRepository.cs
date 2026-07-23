@@ -1,10 +1,13 @@
-﻿using OrnivaApi.Entities;
+﻿using OrnivaApi.Common;
+using OrnivaApi.DTOs.Common;
+using OrnivaApi.Entities;
 
 namespace OrnivaApi.Repositories.Interfaces
 {
     public interface IProductRepository
     {
-        Task<IEnumerable<Product>> GetAll();
+        //Task<IEnumerable<Product>> GetAll();
+        Task<PagedResult<Product>> GetAll(ProductQueryParameters queryParameters);
 
         Task<Product?> GetById(int id);
 
